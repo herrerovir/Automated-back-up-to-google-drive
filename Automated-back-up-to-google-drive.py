@@ -62,3 +62,25 @@ def upload_backup(drive, path_to_zip, folder_name):
     f.Upload() 
     #Set f to none because of a vulnerability found in PyDrive
     f = None
+
+def main():
+    """
+    Function to control the back up process.
+    * Set backup folder name with: Backup + date and time
+    * If the zip folder is not created, state why and stop the program
+    * Get access to google drive
+    * Upload zip file to google drive
+    """
+    #Set backup folder name
+    folder_name = "Backup Test"
+    #If zip creation fails, raise exception and stop the program
+    if not create_zip_folder(path_to_zip, folder_name):
+        raise Exception ("There was an error creating the zip file")
+    #Google Drive authentication
+    gauth, drive = google_auth()
+    #Upload zip file to google drive
+    upload_backup(drive, path_to_archive_locally, folder_name+".zip")
+
+
+if __name__ == "__main__":
+    main()
