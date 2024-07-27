@@ -46,3 +46,19 @@ def google_auth():
     gauth.SaveCredentialsFile("my_credentials.txt")
     drive = GoogleDrive(gauth)
     return gauth, drive
+
+#Upload folder to google drive
+def upload_backup(drive, path_to_zip, folder_name):
+    """
+    Function to upload the backup folder to google drive.
+    Takes: access to drive, path to the folder to back up (string), the name of the folder (string).
+    Returns: None
+    """
+    #Create a google drive file instance
+    f = drive.CreateFile({"title": folder_name}) 
+    #Set the path to the zip file
+    f.SetContentFile(os.path.join(path_to_zip, folder_name)) 
+    #Upload the zip file
+    f.Upload() 
+    #Set f to none because of a vulnerability found in PyDrive
+    f = None
