@@ -4,6 +4,7 @@ from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 import os, shutil
 from datetime import datetime
+import schedule
 
 #Paths
 path_to_zip = r"C:/Users/Backup_Test_Folder"
@@ -101,4 +102,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    #Schedule backup every sunday at 00:00
+    schedule.every().sunday.at("00:00").do(main)
+    
+    while True:
+        schedule.run_pending()
