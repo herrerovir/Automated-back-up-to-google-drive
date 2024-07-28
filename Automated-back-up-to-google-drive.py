@@ -65,6 +65,19 @@ def upload_backup(drive, path_to_zip, folder_name):
     #Set f to none because of a vulnerability found in PyDrive
     f = None
 
+#Remove old backups
+def remove_old_backups(drive, path_to_zip, folder_name):
+    """
+    Function to remove old backups.
+    Takes: access to drive, the path to the folder to back up (string), the name of the folder (string).
+    Returns: None
+    """
+    for i in os.listdir(path_to_zip):
+        file_list = drive.ListFile({"q":"'1VpQA5BL2GxKs4jbrRk8GtF60MHIkJneA' in parents and trashed = False"}).GetList()
+        for file1 in file_list:
+            if file1["title"] < folder_name:
+                file1.Delete()
+
 def main():
     """
     Function to control the back up process.
@@ -84,6 +97,7 @@ def main():
     gauth, drive = google_auth()
     #Upload zip file to google drive
     upload_backup(drive, path_to_archive_locally, folder_name+".zip")
+    remove_old_backups(drive, path_to_zip, folder_name)
 
 
 if __name__ == "__main__":
