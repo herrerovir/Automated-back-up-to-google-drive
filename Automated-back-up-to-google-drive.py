@@ -3,6 +3,7 @@
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 import os, shutil
+from datetime import datetime
 
 #Paths
 path_to_zip = r"C:/Users/Backup_Test_Folder"
@@ -55,7 +56,8 @@ def upload_backup(drive, path_to_zip, folder_name):
     Returns: None
     """
     #Create a google drive file instance
-    f = drive.CreateFile({"title": folder_name}) 
+    f = drive.CreateFile({"parents":[{"id": "1VpQA5BL2GxKs4jbrRk8GtF60MHIkJneA"}]})
+    f["title"] = folder_name
     #Set the path to the zip file
     f.SetContentFile(os.path.join(path_to_zip, folder_name)) 
     #Upload the zip file
@@ -71,8 +73,10 @@ def main():
     * Get access to google drive
     * Upload zip file to google drive
     """
+    #Set machine date and time
+    now = datetime.now()
     #Set backup folder name
-    folder_name = "Backup Test"
+    folder_name = "Backup " + now.strftime(r"%d/%m/%Y %H:%M:%S").replace("/", "-").replace(":", " ")
     #If zip creation fails, raise exception and stop the program
     if not create_zip_folder(path_to_zip, folder_name):
         raise Exception ("There was an error creating the zip file")
